@@ -1,0 +1,6 @@
+# stonegray sshrc
+
+export CLICOLOR=1
+export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcxx
+
+echo "> sshrc ok"
