@@ -6,17 +6,23 @@ cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" || exit
 # Files to be linked
 array=( 
 	".sshrc" 
+	".bashrc"
+	".bash_profile"
+	".zshrc"
+	".profile"
 	".vimrc" 
 	".sshrc.d"
-       	".tmate.conf" 
+    ".tmate.conf" 
+	".tmate2"
 	".tmux.conf.local" 
 )
+
+# Append file name. Probably a better way of doing this.
 array=( "${array[@]/#/$(pwd)/}" )
 
 # Link to $HOME
 echo "> linking ${array[@]} into ~"
-
-
-# Link if we can, otherwise show an error.
 ln -s ${array[@]} $HOME
 
+
+ln -s ./.config/kitty/kitty.conf ~/.config/kitty/
