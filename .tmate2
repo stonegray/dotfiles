@@ -1,0 +1,3 @@
+
+
+tmate new-session "echo tmate && TMUX='' tmux -2 $@"
