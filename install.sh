@@ -25,4 +25,5 @@ echo "> linking ${array[@]} into ~"
 ln -s ${array[@]} $HOME
 
 
-ln -s ./.config/kitty/kitty.conf ~/.config/kitty/
+ln -s `pwd`/.vim/snips ~/.vim/
+ln -s `pwd`/.config/kitty/kitty.conf ~/.config/kitty/
