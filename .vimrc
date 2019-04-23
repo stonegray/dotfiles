@@ -4,7 +4,7 @@
 " - Vundle
 " - ctags
 " - estags
-" - fzf 
+" - fzf
 " - prettier/eslint for javascript files
 
 " Vundle required
@@ -41,11 +41,13 @@ Plugin 'SirVer/ultisnips'
 Plugin 'delimitMate.vim'
 Plugin 'honza/vim-snippets'
 Plugin 'sunaku/vim-dasht'
+
 " Syntax/Language
-Plugin 'isRuslan/vim-es6'
+Plugin 'Chiel92/vim-autoformat'
+"Plugin 'isRuslan/vim-es6'
 Plugin 'pseewald/vim-anyfold'
 Plugin 'meain/vim-package-info', { 'do': 'npm install' }
-
+Plugin 'leafgarland/typescript-vim'
 
 " Misc
 Plugin 'editorconfig/editorconfig-vim'
@@ -87,13 +89,13 @@ set foldmethod=indent "syntax highlighting items specify folds
 " Close all open buffers on entering a window if the only
 " buffer that's left is the NERDTree buffer
 function! s:CloseIfOnlyNerdTreeLeft()
-  if exists("t:NERDTreeBufName")
-    if bufwinnr(t:NERDTreeBufName) != -1
-      if winnr("$") == 1
-       " q
-      endif
-    endif
-  endif
+	if exists("t:NERDTreeBufName")
+		if bufwinnr(t:NERDTreeBufName) != -1
+			if winnr("$") == 1
+				" q
+			endif
+		endif
+	endif
 endfunction
 
 " show nerdtree by default, some tweaks liek focus.
@@ -101,7 +103,7 @@ let NERDTreeShowHidden=1
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-" Enable sticky tree using plugin 
+" Enable sticky tree using plugin
 autocmd vimenter * NERDTreeTabsOpen
 autocmd vimenter * NERDTree
 
@@ -150,24 +152,24 @@ set showcmd
 
 " make search better
 set hlsearch "highlight stuff
-set ignorecase 
+set ignorecase
 set smartcase
 
 " Faster terminal
 "set ttyfast
-set lazyredraw 
+set lazyredraw
 
 " Better persistent undo
-set undofile  
+set undofile
 set undodir=$HOME/.vim/undo
 
 " Ensure directory exists for persistent undo
 command! -nargs=+ Silent
-\   execute 'silent <args>'
-\ | redraw!
+			\   execute 'silent <args>'
+			\ | redraw!
 
 
-set undolevels=5000 
+set undolevels=5000
 set undoreload=50000
 
 set history=1000
@@ -200,14 +202,16 @@ let g:netrw_list_nide=netrw_gitignore#Hide()
 "set statusline+=%*
 
 " opts
-augroup filetype javascript syntax=javascript
 
 " ALE Config
 let g:ale_sign_error = 'E'
 let g:ale_sign_warning = 'w'
 highlight ALEErrorSign ctermbg=red ctermfg=black
 highlight ALEWarningSign ctermbg=none ctermfg=yellow
-let g:ale_fixers = {'javascript': ['prettier', 'eslint']}
+let g:ale_fixershh = {
+			\ 'javascript': ['prettier','eslint'],
+			\ 'typescript': ['eslint']
+			\}
 let g:ale_fix_on_save = 1
 highlight ALEWarning ctermbg=DarkMagenta
 "let g:ale_completion_enabled = 1
@@ -218,15 +222,49 @@ let g:airline#extensions#ale#enabled = 1
 
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"                                            
-let g:UltiSnipsJumpForwardTrigger="<tab>"                                       
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"      
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 
-let g:UltiSnipsSnippetDirectories = ['~/.vim/UltiSnips']
+let g:UltiSnipsSnippetDirectories = ['~/.vim/snips']
 
+
+" Disable the ts plugin's linter. It sucks.
+let g:typescript_indent_disable = 1
+
+" Use the plugin linter; which just calles ESLint behind the scenes
+au BufWrite * :Autoformat
+
+
+
+
+
+
+
+" Autosave
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:autosave_time = 1
+
+
+" Save time when you open a file
+au BufRead,BufNewFile * let b:save_time = localtime()
+
+" save if needed / update the save_time after the save
+function! UpdateFile()
+	if((localtime() - b:save_time) >= g:autosave_time)
+		update
+		let b:save_time = localtime()
+	else
+		" just debugging info
+		echo "[+] ". (localtime() - b:save_time) ." seconds have elapsed so far."
+	endif
+endfunction
+
+"au CursorHold * call UpdateFile()
+"au CursorMoved * call UpdateFile()
 
 " Airline
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -235,7 +273,7 @@ let g:airline#extensions#tabline#enabled = 1
 
 
 
-" Theme 
+" Theme
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 au VimEnter * RainbowParenthesesToggle
@@ -247,6 +285,11 @@ au Syntax * RainbowParenthesesLoadBraces
 
 let g:airline_theme='jellybeans'
 colorscheme PaperColor
+
+
+" Less obnoxous folding
+hi Folded ctermfg=102 guifg=#878787 guibg=NONE ctermbg=NONE
+set fillchars=fold:\
 
 
 " Misc Plugins
@@ -296,7 +339,7 @@ map <Leader>j 20G
 map <Leader>k 20g
 
 " Next tab with t
-map <Leader>t :tabnext <return> 
+map <Leader>t :tabnext <return>
 
 " Use :gs to open Gstatus on right side of screen
 command Gvstatus vertical belowright Gstatus
@@ -309,6 +352,10 @@ cnoreabbrev ghs Gbstatus
 :imap kj <Esc>
 :imap <C-q> <Esc>:q
 
+"Save
+:imap <C-s> <Esc>:q<CR>i
+:cnoremap <C-s> :w<CR>
+map <Leader>w :w<CR>
 
 command! -nargs=+ Ex execute 'silent !<args>' | redraw!
 nnoremap <Leader>` :Ex<space>
@@ -323,43 +370,43 @@ command Term term /usr/local/bin/fish
 
 
 fun! Start()
-    " Don't run if: we have commandline arguments, we don't have an empty
-    " buffer, if we've not invoked as vim or gvim, or if we'e start in insert mode
-    if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode
-        return
-    endif
+	" Don't run if: we have commandline arguments, we don't have an empty
+	" buffer, if we've not invoked as vim or gvim, or if we'e start in insert mode
+	if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode
+		return
+	endif
 
-    " Start a new buffer ...
-    enew " Now we can just write to the buffer, whatever you want.
-    call append('$', "")
-    for line in split(system('toilet vim && fortune -al'), '\n')
-        call append('$', '        ' . l:line)
-    endfor
+	" Start a new buffer ...
+	enew " Now we can just write to the buffer, whatever you want.
+	call append('$', "")
+	for line in split(system('toilet vim && fortune -al'), '\n')
+		call append('$', '        ' . l:line)
+	endfor
 
 
-    " ... and set some options for it
-    setlocal
-        \ nocursorcolumn
-        \ nocursorline
-        \ nolist
-        \ nonumber
-		\ foldcolumn=0
-		\ nofoldenable
-        \ noswapfile
-        \ norelativenumber
-        \ bufhidden=wipe
-        \ buftype=nofile
-        \ nobuflisted
+	" ... and set some options for it
+	setlocal
+				\ nocursorcolumn
+				\ nocursorline
+				\ nolist
+				\ nonumber
+				\ foldcolumn=0
+				\ nofoldenable
+				\ noswapfile
+				\ norelativenumber
+				\ bufhidden=wipe
+				\ buftype=nofile
+				\ nobuflisted
 
-   
-    " No modifications to this buffer
-    setlocal nomodifiable nomodified
 
-    " When we go to insert mode start a new buffer, and start insert
+	" No modifications to this buffer
+	setlocal nomodifiable nomodified
+
+	" When we go to insert mode start a new buffer, and start insert
 	nnoremap <buffer><silent> <CR> :q
-    nnoremap <buffer><silent> e :enew<CR>
-    nnoremap <buffer><silent> i :enew <bar> startinsert<CR>
-    nnoremap <buffer><silent> o :enew <bar> startinsert<CR>
+	nnoremap <buffer><silent> e :enew<CR>
+	nnoremap <buffer><silent> i :enew <bar> startinsert<CR>
+	nnoremap <buffer><silent> o :enew <bar> startinsert<CR>
 endfun
 
 " Run after "doing all the startup stuff"
