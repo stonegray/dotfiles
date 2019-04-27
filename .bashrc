@@ -1,11 +1,13 @@
 
-# Export things
+# Bash
+###############################################################################
+
+# This file is only used by Bash. See ./.profile for generic shell changes.
+
 export CLICOLOR=1
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx # I forget how this works
-# Save and reload the history after each command finishes
-# This lets you <C>+r search history from other tabs!
 
-
+# Define colour macros
 COLOR_RED="\033[0;31m"
 COLOR_YELLOW="\033[0;33m"
 COLOR_GREEN="\033[0;32m"

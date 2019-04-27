@@ -30,26 +30,29 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
 Plugin 'majutsushi/tagbar'
 
 Plugin 'hushicai/tagbar-javascript.vim'
 
 " Completion etc
 Plugin 'w0rp/ale'
+
 Plugin 'SirVer/ultisnips'
 Plugin 'delimitMate.vim'
 Plugin 'honza/vim-snippets'
 Plugin 'sunaku/vim-dasht'
 
 " Syntax/Language
-Plugin 'Chiel92/vim-autoformat'
+Plugin 'sheerun/vim-polyglot'
+"Plugin 'Chiel92/vim-autoformat'
 "Plugin 'isRuslan/vim-es6'
-Plugin 'pseewald/vim-anyfold'
+"Plugin 'pseewald/vim-anyfold'
 Plugin 'meain/vim-package-info', { 'do': 'npm install' }
-Plugin 'leafgarland/typescript-vim'
+"Plugin 'leafgarland/typescript-vim'
+"Plugin 'heavenshell/vim-jsdoc'
 
-" Misc
+
+
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'junegunn/fzf.vim'
 set rtp+=/usr/local/opt/fzf
@@ -58,7 +61,9 @@ Plugin 'ctrlpvim/ctrlp.vim'
 
 " Themes
 Plugin 'jdkanani/vim-material-theme'
-Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'luochen1990/rainbow'
+Plugin 'vim-airline/vim-airline-themes'
+let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 Plugin 'BarretRen/vim-colorscheme'
 Plugin 'NLKNguyen/papercolor-theme'
 
@@ -68,7 +73,24 @@ filetype plugin indent on    " required
 
 " Plugin Configuration
 "
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|built/*'
+let g:ctrlp_show_hidden = 1
+
+
+
+"let g:tmux_navigator_no_mappings = 1
+
+"nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
+"nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
+"nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
+"nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
+"nnoremap <silent> <C-w>/ :TmuxNavigatePrevious<cr>
+
+
+
+
+
+
 
 
 " Folding
@@ -99,19 +121,21 @@ function! s:CloseIfOnlyNerdTreeLeft()
 endfunction
 
 " show nerdtree by default, some tweaks liek focus.
-let NERDTreeShowHidden=1
+let NERDTreeShowHidden=0
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Enable sticky tree using plugin
-autocmd vimenter * NERDTreeTabsOpen
-autocmd vimenter * NERDTree
+"autocmd vimenter * NERDTreeTabsOpen
+"autocmd vimenter * NERDTree
 
 " Fix a weird bug where opening Gstatus makes nerdtree zero width
-autocmd VimEnter * wincmd p
+"autocmd VimEnter * wincmd p
 autocmd vimenter * set winwidth=25
 autocmd vimenter * set winminwidth=25
 
+let NERDTreeIgnore = ['\.pyc$']
+let NERDTreeShowHidden = 1
 let g:NERDTreeWinPos = "left"
 
 let NERDTreeMinimalUI = 1
@@ -130,9 +154,16 @@ set modelines=0
 set nomodeline
 set splitbelow
 
+
+" terminal
+
+set mouse=a
+set ttymouse=xterm2
+
+
+
 " misc
 set background=dark
-set mouse=a
 set number
 set tabstop=4
 set shiftwidth=4
@@ -155,8 +186,8 @@ set hlsearch "highlight stuff
 set ignorecase
 set smartcase
 
-" Faster terminal
-"set ttyfast
+" Draw more chars on redarw
+set ttyfast
 set lazyredraw
 
 " Better persistent undo
@@ -206,20 +237,38 @@ let g:netrw_list_nide=netrw_gitignore#Hide()
 " ALE Config
 let g:ale_sign_error = 'E'
 let g:ale_sign_warning = 'w'
+
+
 highlight ALEErrorSign ctermbg=red ctermfg=black
 highlight ALEWarningSign ctermbg=none ctermfg=yellow
-let g:ale_fixershh = {
-			\ 'javascript': ['prettier','eslint'],
+
+let g:ale_fixers = {
+			\ 'javascript': ['prettier', 'eslint'],
+			\ 'json': ['jq'],
 			\ 'typescript': ['eslint']
 			\}
+
 let g:ale_fix_on_save = 1
+
+let g:ale_set_balloons = 1
+
+" Theme
 highlight ALEWarning ctermbg=DarkMagenta
 "let g:ale_completion_enabled = 1
+
+
+" Always show the sidbar to avoid jumping around when you only have one error
+" left:
+let g:ale_sign_column_always = 1
+let g:ale_statusline_format = ['%d error(s)', '%d warning(s)', 'OK']
 
 " Set this. Airline will handle the rest.
 let g:airline#extensions#ale#enabled = 1
 
+" Autocompletion
+""""""""""""""""""
 
+let g:jsdoc_allow_input_prompt =1
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -232,17 +281,18 @@ let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsSnippetDirectories = ['~/.vim/snips']
 
 
-" Disable the ts plugin's linter. It sucks.
-let g:typescript_indent_disable = 1
+" Typescript
+""""""""""""""""""""'
 
-" Use the plugin linter; which just calles ESLint behind the scenes
-au BufWrite * :Autoformat
+" use tsc as makeprog
+"autocmd FileType typescript :set makeprg=tsc
 
+" Show qf on errors
+"autocmd QuickFixCmdPost [^l]* nested cwindow
+"autocmd QuickFixCmdPost    l* nested lwindow
 
-
-
-
-
+" Disable the ts plugin's indenter.
+"let g:typescript_indent_disable = 0
 
 " Autosave
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -276,10 +326,28 @@ let g:airline#extensions#tabline#enabled = 1
 " Theme
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
+let g:rainbow_conf = {
+			\	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+			\	'ctermfgs': ['blue', 'yellow', 'cyan', 'magenta'],
+			\	'operators': '_,_',
+			\	'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+			\	'separately': {
+			\		'*': {},
+			\		'tex': {
+			\			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+			\		},
+			\		'lisp': {
+			\			'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+			\		},
+			\		'vim': {
+			\			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+			\		},
+			\		'html': {
+			\			'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+			\		},
+			\		'css': 0,
+			\	}
+			\}
 
 "let g:airline_powerline_fonts = 1
 
@@ -289,7 +357,7 @@ colorscheme PaperColor
 
 " Less obnoxous folding
 hi Folded ctermfg=102 guifg=#878787 guibg=NONE ctermbg=NONE
-set fillchars=fold:\
+set fillchars=fold:\ "don't delete this comment or vim will eat the trailing \
 
 
 " Misc Plugins
@@ -411,3 +479,39 @@ endfun
 
 " Run after "doing all the startup stuff"
 "autocmd VimEnter * call Start()
+
+" Reindent
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"" Restore cursor position, window position, and last search after running a
+" command.
+function! Preserve(command)
+  " Save the last search.
+  let search = @/
+
+  " Save the current cursor position.
+  let cursor_position = getpos('.')
+
+  " Save the current window position.
+  normal! H
+  let window_position = getpos('.')
+  call setpos('.', cursor_position)
+
+  " Execute the command.
+  execute a:command
+
+  " Restore the last search.
+  let @/ = search
+
+  " Restore the previous window position.
+  call setpos('.', window_position)
+  normal! zt
+
+  " Restore the previous cursor position.
+  call setpos('.', cursor_position)
+endfunction
+
+" Re-indent the whole buffer.
+function! Indent()
+  call Preserve('normal gg=G')
+endfunction

@@ -1,6 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 	# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
+echo "Starting.."
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/stonegray/.oh-my-zsh"
 
@@ -15,13 +15,9 @@ export ZSH="/Users/stonegray/.oh-my-zsh"
 
 	plugins=(
 	git
-	git-extras
 	docker
-	brew
-	npm
 	zsh-autosuggestions
 	osx
-	command-not-found
 	)
 
 	source $ZSH/oh-my-zsh.sh

@@ -1,4 +1,4 @@
-# Stone's profile. 
+# Stone's profile.
 # shellcheck disable=SC2039
 # shellcheck disable=SC2034
 
@@ -7,7 +7,10 @@
 printf "Configuring $SHELL..."
 
 
-
+exec 3>&2 2> >(tee /tmp/sample-time.$$.log |
+                 gsed -u 's/^.*$/now/' |
+                 gdate -f - +%s.%N >/tmp/sample-time.$$.tim)
+set -x
 
 # History
 ###############################################################################
@@ -20,8 +23,8 @@ export HISTCONTROL=ignorespace:erasedups
 export HISTIGNORE="ls*:cd"
 
 # Increase size
-export HISTSIZE=100000               
-export HISTFILESIZE=100000     
+export HISTSIZE=100000
+export HISTFILESIZE=100000
 
 # Append to history instead of overwriting it
 if [ -n "$ZSH_VERSION" ]; then
@@ -42,7 +45,7 @@ fi
 
 # Set smart card host:
 if [ -f "/usr/lib/ssh-keychain.dylib" ] ; then
-	 PKCS11Provider=/usr/lib/ssh-keychain.dylib
+	PKCS11Provider=/usr/lib/ssh-keychain.dylib
 fi
 
 # Start an agent if one isn't available:
@@ -60,13 +63,14 @@ SSHARGS="qc"
 # -K	Adds the key to the user's Keychain
 # -A	Adds keys already in the user's Keychain
 if [[ "$OSTYPE" == "darwin"* ]]; then
-	SSHARGS+="AK" 
+	SSHARGS+="AK"
 fi
 
 # For each key, run ssh-add.
 grep -R "PRIVATE" ~/.ssh/ |\
-	xargs ssh-add -${SSHARGS} 
+	xargs ssh-add -${SSHARGS}
 
+ssh-add 
 
 
 # ALiases
@@ -78,10 +82,16 @@ alias weechat="TERM=screen-256color-bce weechat"
 alias tree="tree -I \"node_modules|node_modules_held\""
 
 # colorify and humanize LS
-alias ls="ls -GFh"		
+alias ls="ls -GFh"
 
 # Use sshrc instead of ssh
 alias ssh="sshrc"
+
+# Task
+
+alias ta="task add"
+alias tl="task list"
+alias t="task"
 
 # New Aliases
 
@@ -94,10 +104,60 @@ fi
 # Magical tmate fixer:
 alias tmate2="~/.tmate2"
 
-# Plugins 
+# Correct bad habits
 ###############################################################################
 
+# Suggest rmtrash when available.
+CMD="rmtrash"
+if type "$CMD" > /dev/null; then
+	alias rm="echo 'Consider using rmtrash instead. Use a backslash to bypass alias.'"
+fi
+
+#Theme
+##########
+
+# Less Colors for Man Pages 
+export LESS_TERMCAP_mb=$'\E[01;31m'       # begin blinking 
+export LESS_TERMCAP_md=$'\E[01;38;5;74m'  # begin bold 
+export LESS_TERMCAP_me=$'\E[0m'           # end mode 
+export LESS_TERMCAP_se=$'\E[0m'           # end standout-mode 
+export LESS_TERMCAP_so=$'\E[38;5;246m'    # begin standout-mode - info box 
+export LESS_TERMCAP_ue=$'\E[0m'           # end underline 
+export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
+
+
+# Plugins
+###############################################################################
+
+
+# Found on https://bbs.archlinux.org/viewtopic.php?pid=692072#p692072
+extract () {
+	if [ -f $1 ] ; then
+		case $1 in
+			/*.tar.bz2)   tar xvjf $1    ;;
+			*.tar.gz)    tar xvzf $1    ;;
+			*.tar.xz)    tar xvJf $1    ;;
+			*.bz2)       bunzip2 $1     ;;
+			*.rar)       unrar x $1     ;;
+			*.gz)        gunzip $1      ;;
+			*.tar)       tar xvf $1     ;;
+			*.tbz2)      tar xvjf $1    ;;
+			*.tgz)       tar xvzf $1    ;;
+			*.zip)       unzip $1       ;;
+			*.Z)         uncompress $1  ;;
+			*.7z)        7z x $1        ;;
+			*.xz)        unxz $1        ;;
+			*.exe)       cabextract $1  ;;
+			*)           echo "\`$1': unrecognized file compression" ;;
+		esac
+	else
+		echo "\`$1' is not a valid file"
+	fi
+}
+
+
 # Autojump
+#################
 if [ -f /usr/local/etc/profile.d/autojump.sh ]; then
 	source /usr/local/etc/profile.d/autojump.sh # This loads autojump
 else
@@ -105,10 +165,9 @@ else
 fi
 
 
-source /usr/local/etc/profile.d/autojump.sh # This loads autojump
-
 
 # NVM
+#################
 if [ -d "$HOME/.nvm" ]; then
 	export NVM_DIR="$HOME/.nvm"
 	[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
@@ -120,5 +179,17 @@ fi
 
 
 # Yarn
+#################
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
+
+# Google Cloud SDK.
+#################
+if [ -f '/Users/stonegray/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/stonegray/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/stonegray/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/stonegray/google-cloud-sdk/completion.zsh.inc'; fi
+
+
+set +x
+exec 2>&3 3>&-
