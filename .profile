@@ -6,12 +6,6 @@
 
 printf "Configuring $SHELL..."
 
-
-exec 3>&2 2> >(tee /tmp/sample-time.$$.log |
-                 gsed -u 's/^.*$/now/' |
-                 gdate -f - +%s.%N >/tmp/sample-time.$$.tim)
-set -x
-
 # History
 ###############################################################################
 
@@ -43,6 +37,14 @@ fi
 # SSH
 ###############################################################################
 
+
+# If we're on macOS, use system ssh-add to access keychain.
+if [[ "$OSTYPE" == "darwin"* ]]; then
+	SSH_ADD="/usr/bin/ssh-add"
+else 
+	SSH_ADD="$(which ssh-add)"
+fi
+
 # Set smart card host:
 if [ -f "/usr/lib/ssh-keychain.dylib" ] ; then
 	PKCS11Provider=/usr/lib/ssh-keychain.dylib
@@ -52,7 +54,7 @@ fi
 if [ -z "$SSH_AUTH_PID" ] ; then
 
 	# Source ssh agent and hide unless stderr.
-	eval "$(ssh-agent -s)" >> /dev/null
+	eval "$(ssh-agent -s)" #>> /dev/null
 fi
 
 
@@ -63,14 +65,13 @@ SSHARGS="qc"
 # -K	Adds the key to the user's Keychain
 # -A	Adds keys already in the user's Keychain
 if [[ "$OSTYPE" == "darwin"* ]]; then
-	SSHARGS+="AK"
+	SSHARGS+="K"
 fi
 
+/usr/bin/ssh-add -A
 # For each key, run ssh-add.
-grep -R "PRIVATE" ~/.ssh/ |\
-	xargs ssh-add -${SSHARGS}
+grep -Rl "PRIVATE" ~/.ssh/ | xargs /usr/bin/ssh-add -K 
 
-ssh-add 
 
 
 # ALiases
@@ -170,8 +171,8 @@ fi
 #################
 if [ -d "$HOME/.nvm" ]; then
 	export NVM_DIR="$HOME/.nvm"
-	[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-	[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
+	[ -s "$NVM_DIR/nvm.sh" ] && . 
+	[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 else
 	echo "$LOGPREFIX NVM is not installed, skipping."
 
@@ -190,6 +191,6 @@ if [ -f '/Users/stonegray/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/stone
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/stonegray/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/stonegray/google-cloud-sdk/completion.zsh.inc'; fi
 
+clear
+echo "COMPLETE"
 
-set +x
-exec 2>&3 3>&-
