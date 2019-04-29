@@ -4,7 +4,16 @@
 
 # See individual shell configurations (bashrc, zshrc etc) for more info.
 
-printf "Configuring $SHELL..."
+# Logger:
+
+function log() {
+	tput cuu 1 && tput el
+	echo ".profile:  $1"
+}
+
+tput cuu 1 && tput el
+
+log "starting $SHELL"
 
 # History
 ###############################################################################
@@ -28,7 +37,7 @@ elif [ -n "$BASH_VERSION" ]; then
 	# Bash:
 	shopt -s histappend
 else
-	echo "Unknown shell, skipping changing history mode"
+	log "Unknown shell, skipping changing history mode"
 fi
 
 
@@ -51,27 +60,34 @@ if [ -f "/usr/lib/ssh-keychain.dylib" ] ; then
 fi
 
 # Start an agent if one isn't available:
-if [ -z "$SSH_AUTH_PID" ] ; then
-
-	# Source ssh agent and hide unless stderr.
-	eval "$(ssh-agent -s)" #>> /dev/null
+if [ -n "${SSH_AUTH_SOCK+set}" ] ; then
+	log "ssh: $SSH_AUTH_SOCK"
+else
+	log "No available agent socket, creating..."
+	eval "$(ssh-agent -s)" >> /dev/null
 fi
 
 
 # Always require confirmation of keys, be quiet.
 SSHARGS="qc"
 
-# If we're on macOS, give ssh-add the following args:
-# -K	Adds the key to the user's Keychain
-# -A	Adds keys already in the user's Keychain
-if [[ "$OSTYPE" == "darwin"* ]]; then
-	SSHARGS+="K"
+# Check if we already have keys loaded:
+
+if ssh-add -L >> /dev/null ; then
+
+	log "$(ssh-add -L | wc -l | sed -e 's/^[ \t]*//') keys loaded"
+else
+	# If we're on macOS, give ssh-add the following args:
+	# -K	Adds the key to the user's Keychain
+	# -A	Adds keys already in the user's Keychain
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+		SSHARGS+="K"
+	fi
+
+	/usr/bin/ssh-add -A
+	# For each key, run ssh-add.
+	grep -Rl "PRIVATE" ~/.ssh/ | xargs /usr/bin/ssh-add -K 
 fi
-
-/usr/bin/ssh-add -A
-# For each key, run ssh-add.
-grep -Rl "PRIVATE" ~/.ssh/ | xargs /usr/bin/ssh-add -K 
-
 
 
 # ALiases
@@ -170,8 +186,9 @@ fi
 # NVM
 #################
 if [ -d "$HOME/.nvm" ]; then
+	log "waiting for nvm..."
 	export NVM_DIR="$HOME/.nvm"
-	[ -s "$NVM_DIR/nvm.sh" ] && . 
+	[ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh 
 	[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 else
 	echo "$LOGPREFIX NVM is not installed, skipping."
@@ -191,6 +208,6 @@ if [ -f '/Users/stonegray/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/stone
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/stonegray/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/stonegray/google-cloud-sdk/completion.zsh.inc'; fi
 
-clear
-echo "COMPLETE"
+log "$LINENO/$LINENO startup tasks done"
+
 
