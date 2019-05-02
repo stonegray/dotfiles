@@ -86,7 +86,7 @@ let g:ctrlp_show_hidden = 1
 "nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
 "nnoremap <silent> <C-w>/ :TmuxNavigatePrevious<cr>
 
-
+"jjjjjjjjjjk
 
 
 
@@ -153,14 +153,13 @@ set visualbell
 set modelines=0
 set nomodeline
 set splitbelow
-
+set splitright
 
 " terminal
 
 set mouse=a
-set ttymouse=xterm2
 
-
+set cursorline
 
 " misc
 set background=dark
@@ -183,8 +182,8 @@ set showcmd
 
 " make search better
 set hlsearch "highlight stuff
-set ignorecase
-set smartcase
+set ignorecase " ignore case in search
+set smartcase " but if we put a capital letter, don't ignore it.
 
 " Draw more chars on redarw
 set ttyfast
@@ -199,6 +198,10 @@ command! -nargs=+ Silent
 			\   execute 'silent <args>'
 			\ | redraw!
 
+
+set scrolloff=5
+" Show file title in terminal tab
+set title
 
 set undolevels=5000
 set undoreload=50000
@@ -222,6 +225,22 @@ let g:netrw_altv=1 " splits to right
 let g:netrw_liststyle=3 "tree
 let g:netrw_list_nide=netrw_gitignore#Hide()
 "let g:netrw_list_hide
+
+
+
+if !has('nvim')
+	set hlsearch
+	" Neovim has SGR enabled by default.
+	" Enable mouse mode working past 220th column
+	" https://stackoverflow.com/questions/7000960/in-vim-why-doesnt-my-mouse-work-past-the-220th-column
+	if has("mouse_sgr")
+		set ttymouse=sgr
+	else
+		set ttymouse=xterm2
+	end
+endif 
+
+
 
 
 " Syntax & Linting
@@ -430,11 +449,24 @@ nnoremap <Leader>` :Ex<space>
 nnoremap <C-`> :Ex<space>
 
 
+
+
+" improve vs resizing
+if bufwinnr(1)
+	nnoremap + <C-W>>
+	nnoremap - <C-W><
+endif
+
+" esc closes term
+tnoremap <Esc> <C-\><C-n>
+
+
 " Macro for replace
 nnoremap <Leader>r :hs/
 
 
-command Term term /usr/local/bin/fish
+command Term :split | resize 20 | term
+
 
 
 fun! Start()
