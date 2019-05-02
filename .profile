@@ -10,10 +10,14 @@ function log() {
 	tput cuu 1 && tput el
 	echo ".profile:  $1"
 }
-
+clear
 tput cuu 1 && tput el
 
 log "starting $SHELL"
+
+
+# Enviroment
+export EDITOR="`which vim`"
 
 # History
 ###############################################################################
@@ -181,15 +185,17 @@ else
 	echo "$LOGPREFIX Autojump is not installed, skipping"
 fi
 
-
-
 # NVM
 #################
 if [ -d "$HOME/.nvm" ]; then
-	log "waiting for nvm..."
-	export NVM_DIR="$HOME/.nvm"
-	[ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh 
-	[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+	if which nvm >> /dev/null; then
+		log "skipping nvm..."
+	else
+		log "waiting for nvm..."
+		export NVM_DIR="$HOME/.nvm"
+		[ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh 
+		[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+	fi
 else
 	echo "$LOGPREFIX NVM is not installed, skipping."
 
