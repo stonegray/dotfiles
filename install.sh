@@ -32,14 +32,21 @@ done < <(
 echo "linking ${#array[@]} files..."
 echo ${array[@]}
 for i in "${array[@]}";do
+
+	# For each file
 	if [[ -L "~/${i}" ]]
 	then
-		unlink ~/${i}
+		# If it's a symlink, unlink it.
+		unlink -rf ~/${i}
 	else 
+		# Otherwise, prepare the trash, and trash it.
 		mkdir -p  ~/.Trash/${i} 2> /dev/null
+		rm -rf ~/.Trash/${i}
 		mv ~/${i} ~/.Trash/${i} 2> /dev/null
-		unlink ~/${i}
+
 	fi
+
+	# Finally, link it:
 	ln -s $PWD/home/${i} ~/${i}
 done
 
