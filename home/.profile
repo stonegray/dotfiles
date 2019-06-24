@@ -6,19 +6,21 @@
 
 # Logger:
 function log() {
-	#tput cuu 1 && tput el
+	tput cuu 1 && tput el
 	echo ".profile:  $1"
 }
-clear
 tput cuu 1 && tput el
 
+# Uncomment to show commands as run
 #set -o xtrace
-
-log "configuring $SHELL"
 
 
 # Enviroment
 export EDITOR="`which vim`"
+
+# Default to bash-like wildcard behaviour
+unsetopt no_match
+
 
 # History
 ###############################################################################
@@ -124,15 +126,6 @@ fi
 # Magical tmate fixer:
 alias tmate2="~/.tmate2"
 
-# Correct bad habits
-###############################################################################
-
-# Suggest rmtrash when available.
-CMD="rmtrash"
-if type "$CMD" > /dev/null; then
-	alias rm="echo 'Consider using rmtrash instead. Use a backslash to bypass alias.'"
-fi
-
 #Theme
 ##########
 
@@ -216,6 +209,6 @@ if [ -n "$ZSH_VERSION" ]; then
 	if [ -f '/Users/stonegray/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/stonegray/google-cloud-sdk/completion.zsh.inc'; fi
 fi
 
-log "$LINENO/$LINENO startup tasks done"
+log "$LINENO/$LINENO shell startup tasks done"
 
 
