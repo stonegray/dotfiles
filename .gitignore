@@ -1,3 +1,4 @@
+.*.swp
 *.swp
-automatic_backups/:wq
+automatic_backups/
 
