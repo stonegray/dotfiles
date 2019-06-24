@@ -3,31 +3,38 @@
 # cd to here
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" || exit
 
-# Files to be linked
-array=(
-".sshrc"
-".bashrc"
-".bash_profile"
-".zshrc"
-".profile"
-".vimrc"
-".sshrc"
-".sshrc.d"
-".tmate.conf"
-".tmate2"
-".tmux.conf.local"
+shopt -s nullglob
+
+# Find all direcotories, create them
+array=()
+while IFS= read -r -d $'\0'; do
+	array+=("$REPLY")
+done < <(
+	sh -c 'cd home && find . -type d -print0'
 )
 
-# Append file name. Probably a better way of doing this.
-array=( "${array[@]/#/$(pwd)/}" )
-
-# Link to $HOME
-echo "> linking ${array[@]} into ~"
-ln -s ${array[@]} $HOME
+echo "creating ${#array[@]} directories..."
+echo ${array[@]}
+( cd ~ && mkdir -p ${array[@]} )
 
 
-mkdir -p ~/.vim/
-ln -s `pwd`/.vim/snips ~/.vim/
 
-mkdir -p ~/.config/kitty/
-ln -s `pwd`/.config/kitty/kitty.conf ~/.config/kitty/
+
+# Find all files, symlink them
+
+array=()
+while IFS= read -r -d $'\0'; do
+	array+=("$REPLY")
+done < <(
+	sh -c 'cd home && find . -type f -print0'
+)
+
+echo "linking ${#array[@]} files..."
+echo ${array[@]}
+
+
+
+
+
+
+
