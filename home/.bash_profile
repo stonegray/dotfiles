@@ -1,1 +1,2 @@
+# Simply load profile:
 . .profile
