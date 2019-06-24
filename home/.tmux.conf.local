@@ -1,17 +1,5 @@
 # requires https://github.com/gpakosz/.tmux
 
-
-
-
-
-
-# User customizations below: Press G
-
-
-
-
-
-
 tmux_conf_new_window_retain_current_path=true
 
 # new pane retains current path, possible values are:
@@ -294,8 +282,6 @@ set -g visual-activity on
 bind-key j command-prompt -p "Create pane from window #:" "join-pane -s ':%%'"
 
 bind-key C-l last-window
-
-#set -g default-terminal "screen-256color"
 
 set-option -g default-shell /bin/zsh
 
