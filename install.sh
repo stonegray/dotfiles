@@ -31,7 +31,17 @@ done < <(
 
 echo "linking ${#array[@]} files..."
 echo ${array[@]}
-
+for i in "${array[@]}";do
+	if [[ -L "~/${i}" ]]
+	then
+		unlink ~/${i}
+	else 
+		mkdir -p  ~/.Trash/${i} 2> /dev/null
+		mv ~/${i} ~/.Trash/${i} 2> /dev/null
+		unlink ~/${i}
+	fi
+	ln -s $PWD/home/${i} ~/${i}
+done
 
 
 
