@@ -45,11 +45,7 @@ Plugin 'sunaku/vim-dasht'
 " Syntax/Language
 Plugin 'sheerun/vim-polyglot'
 "Plugin 'Chiel92/vim-autoformat'
-"Plugin 'isRuslan/vim-es6'
 "Plugin 'pseewald/vim-anyfold'
-"Plugin 'meain/vim-package-info', { 'do': 'npm install' }
-"Plugin 'leafgarland/typescript-vim'
-"Plugin 'heavenshell/vim-jsdoc'
 Plugin 'xuhdev/vim-latex-live-preview'
 
 
@@ -72,10 +68,8 @@ filetype plugin indent on    " required
 
 
 " Plugin Configuration
-"
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|built/*'
 let g:ctrlp_show_hidden = 1
-
 
 " Set tex preview update time to 1000ms
 autocmd Filetype tex setl updatetime=1
@@ -90,13 +84,6 @@ let g:livepreview_previewer = 'open -a Preview'
 "nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
 "nnoremap <silent> <C-w>/ :TmuxNavigatePrevious<cr>
 
-"jjjjjjjjjjk
-
-
-
-
-
-
 " Folding
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -110,6 +97,8 @@ set foldmethod=indent "syntax highlighting items specify folds
 
 " NERDTree
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Uncomment to close if only tree is open:
 "autocmd WinEnter * call s:CloseIfOnlyNerdTreeLeft()
 
 " Close all open buffers on entering a window if the only
@@ -302,20 +291,6 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsEditSplit="vertical"
 
 let g:UltiSnipsSnippetDirectories = ['~/.vim/snips']
-
-
-" Typescript
-""""""""""""""""""""'
-
-" use tsc as makeprog
-"autocmd FileType typescript :set makeprg=tsc
-
-" Show qf on errors
-"autocmd QuickFixCmdPost [^l]* nested cwindow
-"autocmd QuickFixCmdPost    l* nested lwindow
-
-" Disable the ts plugin's indenter.
-"let g:typescript_indent_disable = 0
 
 " Autosave
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
