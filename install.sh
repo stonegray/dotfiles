@@ -3,8 +3,6 @@
 # cd to here
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" || exit
 
-shopt -s nullglob
-
 # Find all direcotories, create them
 array=()
 while IFS= read -r -d $'\0'; do
@@ -18,10 +16,7 @@ echo ${array[@]}
 ( cd ~ && mkdir -p ${array[@]} )
 
 
-
-
 # Find all files, symlink them
-
 array=()
 while IFS= read -r -d $'\0'; do
 	array+=("$REPLY")
@@ -43,15 +38,9 @@ for i in "${array[@]}";do
 		mkdir -p  ~/.Trash/${i} 2> /dev/null
 		rm -rf ~/.Trash/${i}
 		mv ~/${i} ~/.Trash/${i} 2> /dev/null
-
 	fi
 
 	# Finally, link it:
 	ln -s $PWD/home/${i} ~/${i}
 done
-
-
-
-
-
 
