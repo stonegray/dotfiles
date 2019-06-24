@@ -5,15 +5,16 @@
 # See individual shell configurations (bashrc, zshrc etc) for more info.
 
 # Logger:
-
 function log() {
-	tput cuu 1 && tput el
+	#tput cuu 1 && tput el
 	echo ".profile:  $1"
 }
 clear
 tput cuu 1 && tput el
 
-log "starting $SHELL"
+#set -o xtrace
+
+log "configuring $SHELL"
 
 
 # Enviroment
@@ -43,7 +44,6 @@ elif [ -n "$BASH_VERSION" ]; then
 else
 	log "Unknown shell, skipping changing history mode"
 fi
-
 
 
 
@@ -100,7 +100,7 @@ fi
 alias weechat="TERM=screen-256color-bce weechat"
 
 # Hide node_modules in tree
-alias tree="tree -I \"node_modules|node_modules_held\""
+alias tree="tree -I \"node_modules|node_modules.nosync\""
 
 # colorify and humanize LS
 alias ls="ls -GFh"
@@ -120,7 +120,6 @@ alias t="task"
 if [[ "$OSTYPE" == "darwin"* ]]; then
 	alias ctags="`brew --prefix`/bin/ctags"
 fi
-
 
 # Magical tmate fixer:
 alias tmate2="~/.tmate2"
@@ -180,6 +179,7 @@ extract () {
 # Autojump
 #################
 if [ -f /usr/local/etc/profile.d/autojump.sh ]; then
+	true
 	source /usr/local/etc/profile.d/autojump.sh # This loads autojump
 else
 	echo "$LOGPREFIX Autojump is not installed, skipping"
@@ -212,7 +212,9 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 if [ -f '/Users/stonegray/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/stonegray/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/stonegray/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/stonegray/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -n "$ZSH_VERSION" ]; then
+	if [ -f '/Users/stonegray/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/stonegray/google-cloud-sdk/completion.zsh.inc'; fi
+fi
 
 log "$LINENO/$LINENO startup tasks done"
 

@@ -37,7 +37,7 @@ Plugin 'hushicai/tagbar-javascript.vim'
 " Completion etc
 Plugin 'w0rp/ale'
 
-Plugin 'SirVer/ultisnips'
+"Plugin 'SirVer/ultisnips'
 Plugin 'delimitMate.vim'
 Plugin 'honza/vim-snippets'
 Plugin 'sunaku/vim-dasht'
@@ -47,10 +47,10 @@ Plugin 'sheerun/vim-polyglot'
 "Plugin 'Chiel92/vim-autoformat'
 "Plugin 'isRuslan/vim-es6'
 "Plugin 'pseewald/vim-anyfold'
-Plugin 'meain/vim-package-info', { 'do': 'npm install' }
+"Plugin 'meain/vim-package-info', { 'do': 'npm install' }
 "Plugin 'leafgarland/typescript-vim'
 "Plugin 'heavenshell/vim-jsdoc'
-
+Plugin 'xuhdev/vim-latex-live-preview'
 
 
 Plugin 'editorconfig/editorconfig-vim'
@@ -76,6 +76,10 @@ filetype plugin indent on    " required
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|built/*'
 let g:ctrlp_show_hidden = 1
 
+
+" Set tex preview update time to 1000ms
+autocmd Filetype tex setl updatetime=1
+let g:livepreview_previewer = 'open -a Preview'
 
 
 "let g:tmux_navigator_no_mappings = 1
@@ -264,7 +268,7 @@ highlight ALEWarningSign ctermbg=none ctermfg=yellow
 let g:ale_fixers = {
 			\ 'javascript': ['prettier', 'eslint'],
 			\ 'json': ['jq'],
-			\ 'typescript': ['eslint']
+			\ 'typescript': ['tslint', 'eslint']
 			\}
 
 let g:ale_fix_on_save = 1
@@ -395,7 +399,9 @@ au FileType javascript let b:loaded_delimitMate = 1
 " Keybindings!
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" Leave it as the defualt backslash
 let mapleader=" "
+noremap <Space> <Nop>
 
 map <Leader>n <plug>NERDTreeTabsToggle<CR>
 
@@ -405,6 +411,8 @@ command W w !sudo tee % > /dev/null
 " Q iS nOt aN eDiToR cOmMaNd
 command Q q
 
+" Select all
+map <Leader>a ggVG
 
 " In insert or command mode, move normally by using Ctrl
 inoremap <C-h> <Left>
@@ -416,6 +424,16 @@ cnoremap <C-j> <Down>
 cnoremap <C-k> <Up>
 cnoremap <C-l> <Right>
 
+
+nnoremap <leader>f :call RelToggle()<cr>
+
+function! RelToggle()
+	if &relativenumber
+		setlocal relativenumber=0
+	else
+		setlocal relativenumber=4
+	endif
+endfunction
 " Easy window move
 "map <C-j> <C-W>j
 "map <C-h> <C-W>h
