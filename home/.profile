@@ -21,6 +21,10 @@ export EDITOR="`which vim`"
 # Default to bash-like wildcard behaviour
 unsetopt no_match
 
+# Set $ZSH
+
+export ZSH=~/.oh_my_zsh
+
 
 # History
 ###############################################################################
