@@ -4,7 +4,7 @@ My personal \*nix configuration files.
 
 ## What it includes
 
--   vim/nvim, tmux, tmate, sshrc, bash, zsh
+-   vim/nvim, tmux, tmate, sshrc, bash, zsh, alacritty, karabiner, kitty, mc, etc.
 -   alias rewrites for various commands
 
 ## Installation
