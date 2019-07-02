@@ -37,7 +37,7 @@ Plugin 'hushicai/tagbar-javascript.vim'
 " Completion etc
 Plugin 'w0rp/ale'
 
-"Plugin 'SirVer/ultisnips'
+Plugin 'SirVer/ultisnips'
 Plugin 'delimitMate.vim'
 Plugin 'honza/vim-snippets'
 Plugin 'sunaku/vim-dasht'
