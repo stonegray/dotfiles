@@ -17,6 +17,7 @@ echo ${array[@]}
 
 
 # Find all files, symlink them
+echo "Finding files..."
 array=()
 while IFS= read -r -d $'\0'; do
 	array+=("$REPLY")
@@ -44,3 +45,5 @@ for i in "${array[@]}";do
 	ln -s $PWD/home/${i} ~/${i}
 done
 
+# Manual link for tmux:
+ln -s -f ~/.tmux/.tmux.conf ~
