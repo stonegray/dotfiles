@@ -36,10 +36,11 @@ Plugin 'hushicai/tagbar-javascript.vim'
 
 " Completion etc
 Plugin 'w0rp/ale'
-
+Plugin 'ervandew/supertab'
+Plugin 'Valloric/YouCompleteMe'
 Plugin 'SirVer/ultisnips'
 Plugin 'delimitMate.vim'
-Plugin 'honza/vim-snippets'
+"Plugin 'honza/vim-snippets'
 Plugin 'sunaku/vim-dasht'
 
 " Syntax/Language
@@ -283,9 +284,16 @@ let g:airline#extensions#ale#enabled = 1
 let g:jsdoc_allow_input_prompt =1
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
