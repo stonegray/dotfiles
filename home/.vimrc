@@ -288,7 +288,7 @@ function! UpdateFile()
 		let b:save_time = localtime()
 	else
 		" just debugging info
-		echo "[+] ". (localtime() - b:save_time) ." seconds have elapsed so far."
+		"echo "[+] ". (localtime() - b:save_time) ." seconds have elapsed so far."
 	endif
 endfunction
 
@@ -303,7 +303,6 @@ let g:airline#extensions#tabline#enabled = 1
 
 " Theme
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 let g:rainbow_conf = {
 			\	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
 			\	'ctermfgs': ['blue', 'yellow', 'cyan', 'magenta'],
@@ -337,7 +336,6 @@ set fillchars=fold:\ "don't delete this comment or vim will eat the trailing \
 
 " Misc Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:dasht_results_window = 'botright vnew'
 
 let b:delimitMate_expand_cr = 1
 let b:delimitMate_smart_quotes = 1
@@ -427,6 +425,7 @@ nnoremap <Leader>r :hs/
 
 command Term :split | resize 15 | term
 
+" Function to create splash screen:
 fun! Start()
 	" Don't run if: we have commandline arguments, we don't have an empty
 	" buffer, if we've not invoked as vim or gvim, or if we'e start in insert mode
@@ -463,14 +462,11 @@ fun! Start()
 				\ nofoldenable
 				\ noswapfile
 				\ norelativenumber
-				\ bufhidden=wipe
-				\ buftype=nofile
 				\ nobuflisted
-
+				"\ buftype=terminal
 
 	" No modifications to this buffer
 	setlocal nomodifiable nomodified
-	setlocal !modified
 
 	" When we go to insert mode start a new buffer, and start insert
 	nnoremap <buffer><silent> <CR> :q
