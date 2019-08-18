@@ -14,14 +14,16 @@ filetype off
 
 " Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set runtimepath+=~/.vim_runtime
 " set the runtime path to include Vundle and initialize
+set runtimepath+=~/.vim_runtime
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 
 " Various plugins
 Plugin 'VundleVim/Vundle.vim'
+
+" Git
 Plugin 'tpope/vim-fugitive'
 
 " UI
@@ -30,39 +32,39 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'vim-airline/vim-airline'
-Plugin 'majutsushi/tagbar'
 
-Plugin 'hushicai/tagbar-javascript.vim'
 
 " Completion etc
 Plugin 'w0rp/ale'
-Plugin 'ervandew/supertab'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'SirVer/ultisnips'
 Plugin 'delimitMate.vim'
-"Plugin 'honza/vim-snippets'
-Plugin 'sunaku/vim-dasht'
+
+
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+
+" Optional:
+Plugin 'honza/vim-snippets'
 
 " Syntax/Language
 Plugin 'sheerun/vim-polyglot'
-"Plugin 'Chiel92/vim-autoformat'
-"Plugin 'pseewald/vim-anyfold'
-Plugin 'xuhdev/vim-latex-live-preview'
-
 
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'junegunn/fzf.vim'
 set rtp+=/usr/local/opt/fzf
+
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'ctrlpvim/ctrlp.vim'
 
 " Themes
 Plugin 'jdkanani/vim-material-theme'
 Plugin 'luochen1990/rainbow'
-Plugin 'vim-airline/vim-airline-themes'
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'BarretRen/vim-colorscheme'
 Plugin 'NLKNguyen/papercolor-theme'
+Plugin 'balanceiskey/vim-framer-syntax'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -77,8 +79,6 @@ autocmd Filetype tex setl updatetime=1
 let g:livepreview_previewer = 'open -a Preview'
 
 
-"let g:tmux_navigator_no_mappings = 1
-
 "nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
 "nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
 "nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
@@ -89,7 +89,7 @@ let g:livepreview_previewer = 'open -a Preview'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "-- FOLDING --
-set foldlevelstart=2 "start file with all folds opened
+set foldlevelstart=3 "start file with most folds opened
 autocmd BufWrite * mkview
 autocmd BufRead * silent! loadview
 set foldcolumn=1 "defines 1 col at window left, to indicate folding
@@ -102,33 +102,19 @@ set foldmethod=indent "syntax highlighting items specify folds
 " Uncomment to close if only tree is open:
 "autocmd WinEnter * call s:CloseIfOnlyNerdTreeLeft()
 
-" Close all open buffers on entering a window if the only
-" buffer that's left is the NERDTree buffer
-function! s:CloseIfOnlyNerdTreeLeft()
-	if exists("t:NERDTreeBufName")
-		if bufwinnr(t:NERDTreeBufName) != -1
-			if winnr("$") == 1
-				" q
-			endif
-		endif
-	endif
-endfunction
+" hide nerdtree by default, some tweaks liek focus.
+let NERDTreeShowHidden=1
 
-" show nerdtree by default, some tweaks liek focus.
-let NERDTreeShowHidden=0
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-" Enable sticky tree using plugin
-"autocmd vimenter * NERDTreeTabsOpen
-"autocmd vimenter * NERDTree
 
 " Fix a weird bug where opening Gstatus makes nerdtree zero width
-"autocmd VimEnter * wincmd p
+" autocmd VimEnter * wincmd p
 autocmd vimenter * set winwidth=25
 autocmd vimenter * set winminwidth=25
 
-let NERDTreeIgnore = ['\.pyc$']
+let NERDTreeIgnore = ['\.pyc$', '\.swp$']
 let NERDTreeShowHidden = 1
 let g:NERDTreeWinPos = "left"
 
@@ -150,9 +136,7 @@ set splitbelow
 set splitright
 
 " terminal
-
 set mouse=a
-
 set cursorline
 
 " misc
@@ -207,19 +191,20 @@ set listchars+=space:␣
 set listchars+=eol:¬
 set listchars+=tab:··
 
-set cmdheight=2
+" Keep this at default
+set cmdheight=1
 
 " Automatically reload file when it changes externally
 set autoread
 
 " File browser
+" Netrw is still best for working on ssh
 let g:netrw_banner=0
 let g:newrw_browse_split=4
 let g:netrw_altv=1 " splits to right
 let g:netrw_liststyle=3 "tree
 let g:netrw_list_nide=netrw_gitignore#Hide()
 "let g:netrw_list_hide
-
 
 
 if !has('nvim')
@@ -234,40 +219,29 @@ if !has('nvim')
 	end
 endif 
 
-
-
-
 " Syntax & Linting
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Add status information:
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-
-" opts
 
 " ALE Config
 let g:ale_sign_error = 'E'
 let g:ale_sign_warning = 'w'
 
-
 highlight ALEErrorSign ctermbg=red ctermfg=black
 highlight ALEWarningSign ctermbg=none ctermfg=yellow
 
 let g:ale_fixers = {
-			\ 'javascript': ['prettier', 'eslint'],
+			\ 'javascript': ['eslint'],
 			\ 'json': ['jq'],
-			\ 'typescript': ['tslint', 'eslint']
+			\ 'typescript': ['tslint', 'eslint'],
+			\ 'html': ['eslint']
 			\}
 
 let g:ale_fix_on_save = 1
-
 let g:ale_set_balloons = 1
 
 " Theme
 highlight ALEWarning ctermbg=DarkMagenta
-"let g:ale_completion_enabled = 1
+let g:ale_completion_enabled = 1
 
 
 " Always show the sidbar to avoid jumping around when you only have one error
@@ -280,7 +254,6 @@ let g:airline#extensions#ale#enabled = 1
 
 " Autocompletion
 """"""""""""""""""
-
 let g:jsdoc_allow_input_prompt =1
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
@@ -324,7 +297,6 @@ endfunction
 
 " Airline
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 let g:airline#extensions#tabline#enabled = 1
 
 
@@ -355,11 +327,8 @@ let g:rainbow_conf = {
 			\	}
 			\}
 
-"let g:airline_powerline_fonts = 1
-
 let g:airline_theme='jellybeans'
 colorscheme PaperColor
-
 
 " Less obnoxous folding
 hi Folded ctermfg=102 guifg=#878787 guibg=NONE ctermbg=NONE
@@ -368,25 +337,25 @@ set fillchars=fold:\ "don't delete this comment or vim will eat the trailing \
 
 " Misc Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 let g:dasht_results_window = 'botright vnew'
 
-
-let delimitMate_expand_cr = 1
+let b:delimitMate_expand_cr = 1
+let b:delimitMate_smart_quotes = 1
+let b:delimitMate_smart_matchpairs = 1
+let b:delimitMate_autoclose = 1
 
 " Disable delimitMate: Using manual completions
 au FileType javascript let b:loaded_delimitMate = 1
 
 
-
 " Keybindings!
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Leave it as the defualt backslash
 let mapleader=" "
 noremap <Space> <Nop>
 
 map <Leader>n <plug>NERDTreeTabsToggle<CR>
+
 
 " Save with sudo if W is used:
 command W w !sudo tee % > /dev/null
@@ -417,11 +386,6 @@ function! RelToggle()
 		setlocal relativenumber=4
 	endif
 endfunction
-" Easy window move
-"map <C-j> <C-W>j
-"map <C-h> <C-W>h
-"map <C-k> <C-W>k
-"map <C-l> <C-W>l
 
 map <Leader>j 20G
 map <Leader>k 20g
@@ -449,9 +413,6 @@ command! -nargs=+ Ex execute 'silent !<args>' | redraw!
 nnoremap <Leader>` :Ex<space>
 nnoremap <C-`> :Ex<space>
 
-
-
-
 " improve vs resizing
 if bufwinnr(1)
 	nnoremap + <C-W>>
@@ -461,14 +422,10 @@ endif
 " esc closes term
 tnoremap <Esc> <C-\><C-n>
 
-
 " Macro for replace
 nnoremap <Leader>r :hs/
 
-
-command Term :split | resize 20 | term
-
-
+command Term :split | resize 15 | term
 
 fun! Start()
 	" Don't run if: we have commandline arguments, we don't have an empty
@@ -479,11 +436,22 @@ fun! Start()
 
 	" Start a new buffer ...
 	enew " Now we can just write to the buffer, whatever you want.
+	
+	" Write VIM with toilet
 	call append('$', "")
-	for line in split(system('toilet vim && fortune -al'), '\n')
+	for line in split(system('toilet vim'), '\n')
 		call append('$', '        ' . l:line)
 	endfor
 
+	" Draw the MOTD from Fortune's file in ~/.vim/fortunes
+	call append('$', '        tip:')
+	for line in split(system('fortune $HOME/.vim/fortunes'), '\n')
+		call append('$', '        ' . l:line)
+	endfor
+
+	call append('$', "")
+	call append('$', "")
+	call append('$','        stone''s vimrc v2-cdfba4a221d8f79311a350f1af76f6370d2cbcc3')
 
 	" ... and set some options for it
 	setlocal
@@ -502,6 +470,7 @@ fun! Start()
 
 	" No modifications to this buffer
 	setlocal nomodifiable nomodified
+	setlocal !modified
 
 	" When we go to insert mode start a new buffer, and start insert
 	nnoremap <buffer><silent> <CR> :q
@@ -511,7 +480,7 @@ fun! Start()
 endfun
 
 " Run after "doing all the startup stuff"
-"autocmd VimEnter * call Start()
+autocmd VimEnter * call Start()
 
 " Reindent
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
