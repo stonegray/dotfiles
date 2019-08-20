@@ -19,7 +19,6 @@ set runtimepath+=~/.vim_runtime
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-
 " Various plugins
 Plugin 'VundleVim/Vundle.vim'
 
@@ -32,6 +31,9 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'vim-airline/vim-airline'
+
+" Chording:
+Plugin 'kana/vim-arpeggio'
 
 
 " Completion etc
@@ -53,7 +55,7 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'junegunn/fzf.vim'
 set rtp+=/usr/local/opt/fzf
 
-Plugin 'christoomey/vim-tmux-navigator'
+"Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'ctrlpvim/ctrlp.vim'
 
 " Themes
@@ -99,10 +101,10 @@ set foldmethod=indent "syntax highlighting items specify folds
 
 " hide nerdtree by default, some tweaks liek focus.
 let NERDTreeShowHidden=1
+let NERDTreeQuitOnOpen=1
 
 autocmd StdinReadPre * let s:std_in=1
 "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
 
 " Fix a weird bug where opening Gstatus makes nerdtree zero width
 " autocmd VimEnter * wincmd p
@@ -191,9 +193,6 @@ set listchars+=tab:··
 " Keep this at default
 set cmdheight=1
 
-" Automatically reload file when it changes externally
-set autoread
-
 " File browser
 " Netrw is still best for working on ssh
 let g:netrw_banner=0
@@ -238,7 +237,6 @@ let g:UltiSnipsSnippetDirectories = ['~/.vim/snips']
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:autosave_time = 1
 
-
 " Save time when you open a file
 au BufRead,BufNewFile * let b:save_time = localtime()
 
@@ -255,12 +253,6 @@ endfunction
 
 "au CursorHold * call UpdateFile()
 "au CursorMoved * call UpdateFile()
-
-" Airline
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline#extensions#tabline#enabled = 1
-
-
 
 " Theme
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -307,17 +299,6 @@ command Q q
 " Select all
 map <Leader>a ggVG
 
-" In insert or command mode, move normally by using Ctrl
-inoremap <C-h> <Left>
-inoremap <C-j> <Down>
-inoremap <C-k> <Up>
-inoremap <C-l> <Right>
-cnoremap <C-h> <Left>
-cnoremap <C-j> <Down>
-cnoremap <C-k> <Up>
-cnoremap <C-l> <Right>
-
-
 nnoremap <leader>f :call RelToggle()<cr>
 
 function! RelToggle()
@@ -327,6 +308,7 @@ function! RelToggle()
 		setlocal relativenumber=4
 	endif
 endfunction
+
 
 map <Leader>j 20G
 map <Leader>k 20g
@@ -341,9 +323,9 @@ cnoreabbrev gs Gvstatus
 cnoreabbrev ghs Gbstatus
 
 " don't get emacs finger
-":imap ;; <Esc>
-:imap kj <Esc>
 :imap <C-q> <Esc>:q
+
+call arpeggio#map('i', '', 0, 'jk', '<Esc>')
 
 "Save
 :imap <C-s> <Esc>:q<CR>i
