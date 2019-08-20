@@ -26,6 +26,9 @@ unsetopt no_match
 export ZSH=~/.oh_my_zsh
 
 
+export PATH=$PATH:~/.npm-packages/bin/
+
+
 # History
 ###############################################################################
 
@@ -40,10 +43,14 @@ export HISTIGNORE="ls*:cd"
 export HISTSIZE=100000
 export HISTFILESIZE=100000
 
+
+
 # Append to history instead of overwriting it
 if [ -n "$ZSH_VERSION" ]; then
 	# ZSH:
 	setopt APPEND_HISTORY
+	setopt setopt inc_append_history
+	setopt share_history
 elif [ -n "$BASH_VERSION" ]; then
 	# Bash:
 	shopt -s histappend
@@ -111,11 +118,7 @@ alias tree="tree -I \"node_modules|node_modules.nosync\""
 # colorify and humanize LS
 alias ls="ls -GFh"
 
-# Use sshrc instead of ssh
-alias ssh="sshrc"
-
 # Task
-
 alias ta="task add"
 alias tl="task list"
 alias t="task"
@@ -216,3 +219,5 @@ fi
 log "$LINENO/$LINENO shell startup tasks done"
 
 
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+alias sv="open -b org.sonicvisualiser.SonicVisualiser"
