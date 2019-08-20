@@ -1,11 +1,3 @@
-zz to center the cursor vertically on your screen. useful when you 250gzz, for instance.
-%
-CTRL-w | and CTRL-W _ maximize your current split vertically and horizontally, respectively. CTRL-W = equalizes 'em.
-%
-%s/^\n// to delete all empty lines
-%
-:g/_pattern_/s/^/#/g will comment out lines containing _pattern_ (if '#' is your comment character/sequence)
-%
 vim -c [command] will launch vim and run a : command at launch, e.g. "vim -c NERDTree."
 %
 CTRL-w s CTRL-w T will open current buffer in new tab
@@ -365,4 +357,6 @@ CTRL-U/CTRL-D - scroll up/down, moving the cursor the same number of lines if po
 %
 ctrl-b / ctrl-f : page up / page down
 %
+gggqG will format a text block
+% 
 ctrl-clic / ctrl-t : go to symbol definition (= ctrl-]) (using tags) and back. You can use "make tags" autotooled projects to create tags

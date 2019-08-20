@@ -381,9 +381,8 @@ fun! Start()
 	
 	" Write VIM with toilet
 	call append('$', "")
-	for line in split(system('toilet vim'), '\n')
-		call append('$', '        ' . l:line)
-	endfor
+	call append('$','        stone''s vimrc')
+	call append('$', "")
 
 	" Draw the MOTD from Fortune's file in ~/.vim/fortunes
 	call append('$', '        tip:')
@@ -391,9 +390,6 @@ fun! Start()
 		call append('$', '        ' . l:line)
 	endfor
 
-	call append('$', "")
-	call append('$', "")
-	call append('$','        stone''s vimrc v2-cdfba4a221d8f79311a350f1af76f6370d2cbcc3')
 
 	" ... and set some options for it
 	setlocal
@@ -416,6 +412,11 @@ fun! Start()
 	nnoremap <buffer><silent> e :enew<CR>
 	nnoremap <buffer><silent> i :enew <bar> startinsert<CR>
 	nnoremap <buffer><silent> o :enew <bar> startinsert<CR>
+
+	nnoremap <buffer><silent> h :enew<CR>
+	nnoremap <buffer><silent> j :enew<CR>
+	nnoremap <buffer><silent> k :enew<CR>
+	nnoremap <buffer><silent> l :enew<CR>
 endfun
 
 " Run after "doing all the startup stuff"
