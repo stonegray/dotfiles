@@ -71,13 +71,8 @@ filetype plugin indent on    " required
 
 
 " Plugin Configuration
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|built/*'
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\/*'
 let g:ctrlp_show_hidden = 1
-
-" Set tex preview update time to 1000ms
-autocmd Filetype tex setl updatetime=1
-let g:livepreview_previewer = 'open -a Preview'
-
 
 "nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
 "nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
@@ -92,8 +87,8 @@ let g:livepreview_previewer = 'open -a Preview'
 set foldlevelstart=3 "start file with most folds opened
 autocmd BufWrite * mkview
 autocmd BufRead * silent! loadview
+
 set foldcolumn=1 "defines 1 col at window left, to indicate folding
-"let javaScript_fold=1 "activate folding by JS syntax
 set foldmethod=indent "syntax highlighting items specify folds
 
 " NERDTree
@@ -126,13 +121,14 @@ let NERDTreeDirArrows = 1
 
 set path+=**
 
+set showtabline=0
+
 " View changes
 syntax on
 set ruler
 set visualbell
 set modelines=0
 set nomodeline
-set splitbelow
 set splitright
 
 " terminal
@@ -141,7 +137,6 @@ set cursorline
 
 " misc
 set background=dark
-set number
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
@@ -153,6 +148,8 @@ set fileformat=unix
 set smarttab
 set cindent
 set bs=2
+
+set nonumber
 
 "Improve cli completion
 set wildmode=longest,list,full
@@ -173,11 +170,11 @@ set undodir=$HOME/.vim/undo
 
 " Ensure directory exists for persistent undo
 command! -nargs=+ Silent
-			\   execute 'silent <args>'
-			\ | redraw!
-
+		\   execute 'silent <args>'
+		\ | redraw!
 
 set scrolloff=5
+
 " Show file title in terminal tab
 set title
 
@@ -206,56 +203,20 @@ let g:netrw_liststyle=3 "tree
 let g:netrw_list_nide=netrw_gitignore#Hide()
 "let g:netrw_list_hide
 
-
+" Neovim has SGR enabled by default.
+" Enable mouse mode working past 220th column
+" https://stackoverflow.com/questions/7000960/in-vim-why-doesnt-my-mouse-work-past-the-220th-column
 if !has('nvim')
-	set hlsearch
-	" Neovim has SGR enabled by default.
-	" Enable mouse mode working past 220th column
-	" https://stackoverflow.com/questions/7000960/in-vim-why-doesnt-my-mouse-work-past-the-220th-column
-	if has("mouse_sgr")
-		set ttymouse=sgr
-	else
-		set ttymouse=xterm2
-	end
+set hlsearch
+if has("mouse_sgr")
+	set ttymouse=sgr
+else
+	set ttymouse=xterm2
+end
 endif 
-
-" Syntax & Linting
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" ALE Config
-let g:ale_sign_error = 'E'
-let g:ale_sign_warning = 'w'
-
-highlight ALEErrorSign ctermbg=red ctermfg=black
-highlight ALEWarningSign ctermbg=none ctermfg=yellow
-
-let g:ale_fixers = {
-			\ 'javascript': ['eslint'],
-			\ 'json': ['jq'],
-			\ 'typescript': ['tslint', 'eslint'],
-			\ 'html': ['eslint']
-			\}
-
-let g:ale_fix_on_save = 1
-let g:ale_set_balloons = 1
-
-" Theme
-highlight ALEWarning ctermbg=DarkMagenta
-let g:ale_completion_enabled = 1
-
-
-" Always show the sidbar to avoid jumping around when you only have one error
-" left:
-let g:ale_sign_column_always = 1
-let g:ale_statusline_format = ['%d error(s)', '%d warning(s)', 'OK']
-
-" Set this. Airline will handle the rest.
-let g:airline#extensions#ale#enabled = 1
 
 " Autocompletion
 """"""""""""""""""
-let g:jsdoc_allow_input_prompt =1
-
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 
 " make YCM compatible with UltiSnips (using supertab)
@@ -329,31 +290,13 @@ let g:rainbow_conf = {
 let g:airline_theme='jellybeans'
 colorscheme PaperColor
 
-" Less obnoxous folding
-hi Folded ctermfg=102 guifg=#878787 guibg=NONE ctermbg=NONE
-set fillchars=fold:\ "don't delete this comment or vim will eat the trailing \
-
-
-" Misc Plugins
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let b:delimitMate_expand_cr = 1
-let b:delimitMate_smart_quotes = 1
-let b:delimitMate_smart_matchpairs = 1
-let b:delimitMate_autoclose = 1
-
-" Disable delimitMate: Using manual completions
-au FileType javascript let b:loaded_delimitMate = 1
-
 
 " Keybindings!
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 let mapleader=" "
 noremap <Space> <Nop>
 
 map <Leader>n <plug>NERDTreeTabsToggle<CR>
-
 
 " Save with sudo if W is used:
 command W w !sudo tee % > /dev/null
