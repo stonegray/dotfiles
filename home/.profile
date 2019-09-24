@@ -221,3 +221,21 @@ log "$LINENO/$LINENO shell startup tasks done"
 
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 alias sv="open -b org.sonicvisualiser.SonicVisualiser"
+
+
+
+
+# Terminal
+############################
+
+# Fix laggy command mode switching in ZSH
+export KEYTIMEOUT=1
+bindkey -M viins 'jk' vi-cmd-mode
+
+
+
+# Base16 Shell
+BASE16_SHELL="$HOME/.config/base16-shell/"
+[ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+        eval "$("$BASE16_SHELL/profile_helper.sh")"
