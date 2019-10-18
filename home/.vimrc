@@ -13,9 +13,9 @@ filetype off
 
 " Auto install plugin manager
 if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+	silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+				\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 " Plugins
@@ -72,6 +72,7 @@ Plug 'balanceiskey/vim-framer-syntax'
 call plug#end()
 filetype plugin indent on    " required
 
+let g:airline_statusline_ontop=1
 
 " Plugin Configuration:
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\/*'
@@ -146,14 +147,14 @@ let g:UltiSnipsSnippetDirectories = ['~/.vim/snips']
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+			\ pumvisible() ? "\<C-n>" :
+			\ <SID>check_back_space() ? "\<TAB>" :
+			\ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+	let col = col('.') - 1
+	return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Use <c-space> to trigger completion.
@@ -177,11 +178,11 @@ nmap <silent> gr <Plug>(coc-references)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
+	if (index(['vim','help'], &filetype) >= 0)
+		execute 'h '.expand('<cword>')
+	else
+		call CocAction('doHover')
+	endif
 endfunction
 
 " Highlight symbol under cursor on CursorHold
@@ -195,11 +196,11 @@ xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+	autocmd!
+	" Setup formatexpr specified filetype(s).
+	autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+	" Update signature help on jump placeholder
+	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
@@ -305,6 +306,9 @@ let g:rainbow_conf = {
 			\	}
 			\}
 
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_theme='base16_google'
 let base16colorspace=256
 colorscheme base16-default-dark
@@ -375,61 +379,6 @@ tnoremap <Esc> <C-\><C-n>
 " Macro for replace
 nnoremap <Leader>r :hs/
 
-command Term :split | resize 15 | term
-
-" Function to create splash screen:
-fun! Start()
-	" Don't run if: we have commandline arguments, we don't have an empty
-	" buffer, if we've not invoked as vim or gvim, or if we'e start in insert mode
-	if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode
-		return
-	endif
-
-	" Start a new buffer ...
-	enew " Now we can just write to the buffer, whatever you want.
-	
-	" Write VIM with toilet
-	call append('$', "")
-	call append('$','        stone''s vimrc')
-	call append('$', "")
-
-	" Draw the MOTD from Fortune's file in ~/.vim/fortunes
-	call append('$', '        tip:')
-	for line in split(system('fortune $HOME/.vim/fortunes'), '\n')
-		call append('$', '        ' . l:line)
-	endfor
-
-
-	" ... and set some options for it
-	setlocal
-				\ nocursorcolumn
-				\ nocursorline
-				\ nolist
-				\ nonumber
-				\ foldcolumn=0
-				\ nofoldenable
-				\ noswapfile
-				\ norelativenumber
-				\ nobuflisted
-				"\ buftype=terminal
-
-	" No modifications to this buffer
-	setlocal nomodifiable nomodified
-
-	" When we go to insert mode start a new buffer, and start insert
-	nnoremap <buffer><silent> <CR> :q
-	nnoremap <buffer><silent> e :enew<CR>
-	nnoremap <buffer><silent> i :enew <bar> startinsert<CR>
-	nnoremap <buffer><silent> o :enew <bar> startinsert<CR>
-
-	nnoremap <buffer><silent> h :enew<CR>
-	nnoremap <buffer><silent> j :enew<CR>
-	nnoremap <buffer><silent> k :enew<CR>
-	nnoremap <buffer><silent> l :enew<CR>
-endfun
-
-" Run after "doing all the startup stuff"
-autocmd VimEnter * call Start()
 
 " Reindent
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -437,32 +386,32 @@ autocmd VimEnter * call Start()
 "" Restore cursor position, window position, and last search after running a
 " command.
 function! Preserve(command)
-  " Save the last search.
-  let search = @/
+	" Save the last search.
+	let search = @/
 
-  " Save the current cursor position.
-  let cursor_position = getpos('.')
+	" Save the current cursor position.
+	let cursor_position = getpos('.')
 
-  " Save the current window position.
-  normal! H
-  let window_position = getpos('.')
-  call setpos('.', cursor_position)
+	" Save the current window position.
+	normal! H
+	let window_position = getpos('.')
+	call setpos('.', cursor_position)
 
-  " Execute the command.
-  execute a:command
+	" Execute the command.
+	execute a:command
 
-  " Restore the last search.
-  let @/ = search
+	" Restore the last search.
+	let @/ = search
 
-  " Restore the previous window position.
-  call setpos('.', window_position)
-  normal! zt
+	" Restore the previous window position.
+	call setpos('.', window_position)
+	normal! zt
 
-  " Restore the previous cursor position.
-  call setpos('.', cursor_position)
+	" Restore the previous cursor position.
+	call setpos('.', cursor_position)
 endfunction
 
 " Re-indent the whole buffer.
 function! Indent()
-  call Preserve('normal gg=G')
+	call Preserve('normal gg=G')
 endfunction

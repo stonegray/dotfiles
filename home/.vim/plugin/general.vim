@@ -32,7 +32,8 @@ set smarttab
 set cindent
 set bs=2
 
-set nonumber
+set number relativenumber 
+
 
 "Improve cli completion
 set wildmode=longest,list,full
