@@ -22,7 +22,9 @@ source "${ZINIT_HOME}/zinit.zsh"
 bindkey -v
 
 # Typing 
-#zinit load marlonrichert/zsh-autocomplete
+zinit load marlonrichert/zsh-autocomplete
+zstyle ':autocomplete:*' min-delay 0.2
+zstyle ':autocomplete:*' min-input 2
 zinit load menketechnologies/zsh-expand
 
 # Fun
@@ -31,6 +33,7 @@ zinit light redxtech/zsh-not-vim
 # omzs imports:
 zinit snippet OMZP::node
 zinit snippet OMZP::autojump
+zinit snippet OMZP::history
 zinit snippet OMZP::brew
 
 # Theming/color
