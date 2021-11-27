@@ -7,8 +7,8 @@ window:
 scrolling:
   history: 0
   multiplier: 0
-shell:
-  program: /usr/local/bin/tmux
+  #shell:
+  # program: /usr/local/bin/tmux
 
 
 # Sane defaults:
