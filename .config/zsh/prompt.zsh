@@ -30,6 +30,8 @@ zstyle ':vcs_info:git*' formats \
 zstyle ':vcs_info:git*' actionformats \
 	':%F{85}%b%F{85}%u%c%m%f|%F{67}%a%F{15}%f'
 
+local modeFlag
+
 # Copied from, but modified:
 # https://github.com/zsh-users/zsh/blob/master/Misc/vcs_info-examples
 function +vi-git-untracked()
@@ -74,24 +76,61 @@ function +vi-git-status()
 	hook_com[misc]+=${(j:/:)gitstatus}
 }
 
-precmd() {
-    vcs_info
-
-	#PS1="${ret_status} ${vcs_info_msg_0_} ${host_status} %{$fg[cyan]%}%~%{$reset_color%}"
-
+function update-prompt-string ()
+{
 	local displayPath gitInfoString
 
 	# If we're in a VCS tracked repo, use a git: path instead of 
 	# the actual PWD. Otherwise, use the builtin %~
-    if [[ -z ${vcs_info_msg_1_} ]]; then
+	if [[ -z ${vcs_info_msg_1_} ]]; then
 		displayPath="%~/"
 		gitInfoString=""
-    else
+	else
 		displayPath="${vcs_info_msg_1_}"
 		# Make sure you keep the space here:
 		gitInfoString="%{$reset_color%} (${vcs_info_msg_0_})"
-    fi
+	fi
 
-	PROMPT="%{$fg[yellow]%}> %{$reset_color%}%{$fg[blue]%}%n ${displayPath}${gitInfoString} » "
-
+	PROMPT="%{$fg[yellow]%}> %{$reset_color%}%{$fg[blue]%}%n ${displayPath}${gitInfoString} (${modeFlagString}) » "
 }
+
+# Hooks:
+
+function zle-keymap-select ()
+{
+	case $KEYMAP in
+		vicmd) 
+			print -rn -- $terminfo[cvvis] # block cursor
+			modeFlagString="normal"
+			;;
+		viins|main) 
+			print -rn -- $terminfo[cnorm] # less visible cursor
+			modeFlagString="insert"
+			;;
+	esac
+
+	update-prompt-string
+	zle reset-prompt
+}
+
+zle -N zle-keymap-select
+
+# On initialization, trigger a check of the modeFlagString
+function zle-line-init ()
+{
+	zle-keymap-select
+}
+
+zle -N zle-line-init
+
+
+precmd()
+{
+	vcs_info
+
+	#PS1="${ret_status} ${vcs_info_msg_0_} ${host_status} %{$fg[cyan]%}%~%{$reset_color%}"
+
+	update-prompt-string
+}
+
+
