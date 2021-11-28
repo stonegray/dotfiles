@@ -12,6 +12,7 @@ fi
 source "${ZINIT_HOME}/zinit.zsh"
 
 source ~/.config/zsh/theme.zsh
+source ~/.config/zsh/alias.zsh
 
 
 source ~/.config/zsh/ls_colors

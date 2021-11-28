@@ -7,7 +7,7 @@
 
 setopt PROMPT_SUBST
 
-# VCS
+# Load and configure VCS on prompt
 autoload -Uz vcs_info
 
 zstyle ':vcs_info:*' enable git
@@ -15,10 +15,10 @@ zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git*' check-for-changes true
 zstyle ':vcs_info:git*' check-for-staged-changes true
 
-zstyle ':vcs_info:git*' stagedstr '%F{2}stage%f'
-zstyle ':vcs_info:git*' unstagedstr '%F{1}clean%f'
+zstyle ':vcs_info:git*' stagedstr ' %F{2}stage%{$reset_color%}'
+zstyle ':vcs_info:git*' unstagedstr ' %F{1}changes%{$reset_color%}'
 
-zstyle ':vcs_info:git*+set-message:*' hooks git-untracked git-fancybranch git-stash git-space git-status
+zstyle ':vcs_info:git*+set-message:*' hooks git-untracked git-fancybranch git-stash git-status
 
 # Set vcs formats. This assumes Git, and might not make any sense for other VCS.
 # 0: Status string 
@@ -42,7 +42,7 @@ function +vi-git-untracked()
 			# If instead you want to show the marker only if there are untracked
 			# files in $PWD, use:
 			#[[ -n $(git ls-files --others --exclude-standard) ]] ; then
-			hook_com[staged]+='dirty'
+			hook_com[staged]+=' %{$fg[red]%}untracked%{$reset_color%}'
 	fi
 }
 
@@ -53,7 +53,7 @@ function +vi-git-stash()
 	hook_com[misc]=''  # we don't care about patches
 	if [[ -s ${hook_com[base]}/.git/refs/stash ]] ; then
 		stashes=$(git stash list 2>/dev/null | wc -l)
-		hook_com[misc]=' %{$fg[red]%}stash'
+		hook_com[misc]=' %{$fg[red]%}stash%{$reset_color%}'
 	fi
 }
 
@@ -91,7 +91,7 @@ function update-prompt-string ()
 		gitInfoString="%{$reset_color%} (${vcs_info_msg_0_})"
 	fi
 
-	PROMPT="%{$fg[yellow]%}> %{$reset_color%}%{$fg[blue]%}%n ${displayPath}${gitInfoString} (${modeFlagString}) » "
+	PROMPT="%{$fg[yellow]%}> %{$reset_color%}%{$fg[blue]%}%n ${displayPath}${gitInfoString}%{$reset_color%} (${modeFlagString}) » "
 }
 
 # Hooks:
