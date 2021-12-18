@@ -14,8 +14,7 @@ source "${ZINIT_HOME}/zinit.zsh"
 source ~/.config/zsh/theme.zsh
 source ~/.config/zsh/alias.zsh
 
-
-source ~/.config/zsh/ls_colors
+#source ~/.config/zsh/ls_colors
 
 zinit load zsh-users/zsh-completions
 
@@ -41,3 +40,6 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 
 source ~/.config/zsh/keybinds.zsh
 
+
+export EDITOR=`which vim`
+export VISUAL=`which vim`

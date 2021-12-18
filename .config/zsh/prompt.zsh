@@ -7,8 +7,15 @@
 
 setopt PROMPT_SUBST
 
+# Load extension for opening in editor
+autoload edit-command-line
+zle -N edit-command-line
+
+bindkey -M vicmd v edit-command-line
+
 # Load and configure VCS on prompt
 autoload -Uz vcs_info
+
 
 zstyle ':vcs_info:*' enable git
 
