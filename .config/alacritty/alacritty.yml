@@ -3,6 +3,9 @@
 window:
   dynamic_padding: true
 
+env:
+  TERM: xterm-256color
+
 # Disable scroll, use tmux instead:
 scrolling:
   history: 0
