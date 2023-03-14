@@ -1,3 +1,12 @@
+.DS_Store
+Autodesk
+CheatEngine
+QCAD
+doom
+emacs
+gtk-*
+kitty
+nicotine
 coc
 configstore
 gatsby
@@ -8,4 +17,4 @@ lnav
 ssht
 tpm
 wireshark
-
+rizin
