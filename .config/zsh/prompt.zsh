@@ -16,7 +16,6 @@ bindkey -M vicmd v edit-command-line
 # Load and configure VCS on prompt
 autoload -Uz vcs_info
 
-
 zstyle ':vcs_info:*' enable git
 
 zstyle ':vcs_info:git*' check-for-changes true
