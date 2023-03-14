@@ -40,5 +40,5 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 source ~/.config/zsh/keybinds.zsh
 
 
-export EDITOR=`which vim`
-export VISUAL=`which vim`
+export EDITOR=`which nvim`
+export VISUAL=`which nvim`
