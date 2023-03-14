@@ -12,7 +12,6 @@ fi
 
 source "${ZINIT_HOME}/zinit.zsh"
 
-source ~/.config/zsh/include/*.zsh
 
 #source ~/.config/zsh/ls_colors
 
@@ -30,6 +29,8 @@ zinit light redxtech/zsh-not-vim
 # Theming/color
 zinit load zpm-zsh/colorize
 
+source ~/.config/zsh/include/*.zsh
+source ~/.config/zsh/plugin/*.zsh
 
 # Has to be last?
 zinit load zsh-users/zsh-syntax-highlighting
