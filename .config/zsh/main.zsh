@@ -1,6 +1,9 @@
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
-set -e 
+
+zmodload zsh/zprof 
+
+#set -e 
 
 if [ ! -d "$ZINIT_HOME" ]; then
 	mkdir -p "$(dirname $ZINIT_HOME)"
@@ -12,34 +15,32 @@ fi
 
 source "${ZINIT_HOME}/zinit.zsh"
 
-
-#source ~/.config/zsh/ls_colors
-
 zinit load zsh-users/zsh-completions
-
-autoload -Uz compinit && compinit
-
-# Typing 
-zinit load zsh-users/zsh-autosuggestions
-zinit load "IngoMeyer441/zsh-easy-motion"
-
-# Fun
-zinit light redxtech/zsh-not-vim
-
-# Theming/color
-zinit load zpm-zsh/colorize
-
-source ~/.config/zsh/include/*.zsh
-source ~/.config/zsh/plugin/*.zsh
-
-# Has to be last?
-zinit load zsh-users/zsh-syntax-highlighting
-zinit load zsh-users/zsh-history-substring-search
 
 # prompt
 source ~/.config/zsh/prompt.zsh
+
+# Typing 
+zinit load zsh-users/zsh-autosuggestions
+zinit light "IngoMeyer441/zsh-easy-motion"
+zinit light redxtech/zsh-not-vim
+zinit load zpm-zsh/colorize
+
+
+
+
+autoload -Uz compinit && compinit
+
+zinit load zsh-users/zsh-syntax-highlighting
+zinit load zsh-users/zsh-history-substring-search
+
+source ~/.config/zsh/plugin/*.zsh
+source ~/.config/zsh/include/*.zsh
+source ~/.config/zsh/include/theme.zsh
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 
 export EDITOR=`which nvim`
 export VISUAL=`which nvim`
+
+setopt inc_append_history
